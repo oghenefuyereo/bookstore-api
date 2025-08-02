@@ -1,0 +1,58 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Bookstore API",
+    "version": "1.0.0",
+    "description": "API documentation for the Bookstore project"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/api/users": {
+      "get": {
+        "summary": "Get all users",
+        "responses": {
+          "200": {
+            "description": "A list of users"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new user",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created successfully"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": ["googleId", "name", "email"],
+      "properties": {
+        "googleId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
