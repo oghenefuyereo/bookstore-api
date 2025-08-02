@@ -5,9 +5,9 @@
     "version": "1.0.0",
     "description": "API documentation for the Bookstore project"
   },
-  "host": "localhost:3000",
+  "host": "bookstore-api-e0ml.onrender.com",
   "basePath": "/",
-  "schemes": ["http"],
+  "schemes": ["https"],
   "paths": {
     "/api/users": {
       "get": {
