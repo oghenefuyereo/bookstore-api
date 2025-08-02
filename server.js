@@ -6,11 +6,11 @@ const passport = require("passport");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/auth");
-const errorHandler = require("./middleware/errorHandler"); // <-- Import error handler
+const errorHandler = require("./middleware/errorHandler"); 
 
 // Swagger imports
 const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./swagger.json"); // Make sure this path is correct
+const swaggerDocument = require("./swagger.json"); 
 
 // Load env variables
 dotenv.config();
