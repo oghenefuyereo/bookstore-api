@@ -15,6 +15,9 @@
         "responses": {
           "200": {
             "description": "A list of users"
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       },
@@ -33,6 +36,82 @@
         "responses": {
           "201": {
             "description": "User created successfully"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "summary": "Get a user by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a user by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User updated successfully"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User deleted successfully"
+          },
+          "404": {
+            "description": "User not found"
           }
         }
       }
@@ -44,13 +123,16 @@
       "required": ["googleId", "name", "email"],
       "properties": {
         "googleId": {
-          "type": "string"
+          "type": "string",
+          "example": "1234567890"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "example": "John Doe"
         },
         "email": {
-          "type": "string"
+          "type": "string",
+          "example": "john@example.com"
         }
       }
     }
