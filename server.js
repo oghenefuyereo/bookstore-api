@@ -6,11 +6,11 @@ const passport = require("passport");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/auth");
-const errorHandler = require("./middleware/errorHandler"); 
+const errorHandler = require("./middleware/errorHandler");
 
 // Swagger imports
 const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./swagger.json"); 
+const swaggerDocument = require("./swagger.json");
 
 // Load env variables
 dotenv.config();
@@ -32,7 +32,12 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET || "defaultsecret",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,  // Changed to false to avoid creating empty sessions
+    cookie: {
+      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      httpOnly: true, // Helps prevent XSS attacks
+      maxAge: 1000 * 60 * 60 * 24, // 1 day session duration
+    },
   })
 );
 

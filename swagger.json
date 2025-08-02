@@ -120,7 +120,7 @@
   "definitions": {
     "User": {
       "type": "object",
-      "required": ["googleId", "name", "email"],
+      "required": ["name", "email", "password"],
       "properties": {
         "googleId": {
           "type": "string",
@@ -133,6 +133,10 @@
         "email": {
           "type": "string",
           "example": "john@example.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "StrongPass123!"
         }
       }
     }
