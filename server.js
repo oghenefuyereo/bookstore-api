@@ -8,53 +8,42 @@ const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/auth");
 const errorHandler = require("./middleware/errorHandler");
 
-// Swagger imports
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 
-// Load env variables
 dotenv.config();
 
-// Connect to MongoDB
 connectDB();
 
-// Passport config
 require("./config/passport");
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Session middleware
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "defaultsecret",
     resave: false,
-    saveUninitialized: false,  // Changed to false to avoid creating empty sessions
+    saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-      httpOnly: true, // Helps prevent XSS attacks
-      maxAge: 1000 * 60 * 60 * 24, // 1 day session duration
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,
     },
   })
 );
 
-// Initialize Passport and session
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Swagger route
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Routes
 app.use("/api/users", userRoutes);
 app.use("/auth", authRoutes);
 
-// Error handling middleware (must be after routes)
 app.use(errorHandler);
 
-// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
