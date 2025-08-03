@@ -8,13 +8,22 @@
   "host": "bookstore-api-e0ml.onrender.com",
   "basePath": "/",
   "schemes": ["https"],
+  "produces": ["application/json"],
   "paths": {
     "/api/users": {
       "get": {
+        "tags": ["Users"],
         "summary": "Get all users",
+        "operationId": "getUsers",
         "responses": {
           "200": {
-            "description": "A list of users"
+            "description": "A list of users",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
           },
           "500": {
             "description": "Server error"
@@ -22,7 +31,9 @@
         }
       },
       "post": {
+        "tags": ["Users"],
         "summary": "Create a new user",
+        "operationId": "createUser",
         "parameters": [
           {
             "in": "body",
@@ -35,7 +46,10 @@
         ],
         "responses": {
           "201": {
-            "description": "User created successfully"
+            "description": "User created successfully",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
           },
           "400": {
             "description": "Validation error"
@@ -48,7 +62,9 @@
     },
     "/api/users/{id}": {
       "get": {
+        "tags": ["Users"],
         "summary": "Get a user by ID",
+        "operationId": "getUserById",
         "parameters": [
           {
             "name": "id",
@@ -59,7 +75,10 @@
         ],
         "responses": {
           "200": {
-            "description": "User found"
+            "description": "User found",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
           },
           "404": {
             "description": "User not found"
@@ -67,7 +86,9 @@
         }
       },
       "put": {
+        "tags": ["Users"],
         "summary": "Update a user by ID",
+        "operationId": "updateUser",
         "parameters": [
           {
             "name": "id",
@@ -86,7 +107,10 @@
         ],
         "responses": {
           "200": {
-            "description": "User updated successfully"
+            "description": "User updated successfully",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
           },
           "400": {
             "description": "Validation error"
@@ -97,7 +121,9 @@
         }
       },
       "delete": {
+        "tags": ["Users"],
         "summary": "Delete a user by ID",
+        "operationId": "deleteUser",
         "parameters": [
           {
             "name": "id",
@@ -112,6 +138,138 @@
           },
           "404": {
             "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/books": {
+      "get": {
+        "tags": ["Books"],
+        "summary": "Get all books",
+        "operationId": "getBooks",
+        "responses": {
+          "200": {
+            "description": "A list of books",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Book"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Books"],
+        "summary": "Create a new book",
+        "operationId": "createBook",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "book",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Book"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Book created successfully",
+            "schema": {
+              "$ref": "#/definitions/Book"
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/books/{id}": {
+      "get": {
+        "tags": ["Books"],
+        "summary": "Get a book by ID",
+        "operationId": "getBookById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book found",
+            "schema": {
+              "$ref": "#/definitions/Book"
+            }
+          },
+          "404": {
+            "description": "Book not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Books"],
+        "summary": "Update a book by ID",
+        "operationId": "updateBook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "book",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Book"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Book"
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "404": {
+            "description": "Book not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Books"],
+        "summary": "Delete a book by ID",
+        "operationId": "deleteBook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Book deleted successfully"
+          },
+          "404": {
+            "description": "Book not found"
           }
         }
       }
@@ -137,6 +295,29 @@
         "password": {
           "type": "string",
           "example": "StrongPass123!"
+        }
+      }
+    },
+    "Book": {
+      "type": "object",
+      "required": ["title", "author"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "The Great Gatsby"
+        },
+        "author": {
+          "type": "string",
+          "example": "F. Scott Fitzgerald"
+        },
+        "description": {
+          "type": "string",
+          "example": "A novel set in the Roaring Twenties"
+        },
+        "publishedDate": {
+          "type": "string",
+          "format": "date",
+          "example": "1925-04-10"
         }
       }
     }
