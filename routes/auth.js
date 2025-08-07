@@ -2,7 +2,6 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 
-// Helper to get first name
 function getFirstName(fullName) {
   return fullName ? fullName.split(' ')[0] : '';
 }
@@ -31,16 +30,20 @@ router.get('/github/callback', passport.authenticate('github', {
   res.send(`Welcome ${firstName}, you are logged in`);
 });
 
-// Logout
+// Logout route
 router.get('/logout', (req, res, next) => {
   if (!req.isAuthenticated()) {
+    // User not logged in
     return res.send('You are not logged in');
   }
 
   const firstName = getFirstName(req.user.name);
 
-  req.logout(err => {
-    if (err) return next(err);
+  req.logout(function(err) {
+    if (err) { 
+      return next(err); 
+    }
+    // After logout, session is destroyed, so user info won't be available
     res.send(`${firstName}, you have successfully logged out`);
   });
 });
