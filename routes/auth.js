@@ -2,6 +2,11 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 
+// Helper to get first name
+function getFirstName(fullName) {
+  return fullName ? fullName.split(' ')[0] : '';
+}
+
 // Google OAuth login
 router.get('/google', passport.authenticate('google', {
   scope: ['profile', 'email']
@@ -10,7 +15,8 @@ router.get('/google', passport.authenticate('google', {
 router.get('/google/callback', passport.authenticate('google', {
   failureRedirect: '/'
 }), (req, res) => {
-  res.redirect('/api/users');
+  const firstName = getFirstName(req.user.name);
+  res.json({ message: `Welcome, ${firstName}!`, user: req.user });
 });
 
 // GitHub OAuth login
@@ -21,7 +27,8 @@ router.get('/github', passport.authenticate('github', {
 router.get('/github/callback', passport.authenticate('github', {
   failureRedirect: '/'
 }), (req, res) => {
-  res.redirect('/api/users');
+  const firstName = getFirstName(req.user.name);
+  res.json({ message: `Welcome, ${firstName}!`, user: req.user });
 });
 
 // Logout
