@@ -47,10 +47,14 @@ passport.use(new GitHubStrategy({
   }
 }));
 
+// Serialize user ID to session
 passport.serializeUser((user, done) => done(null, user.id));
 
+// Deserialize user from ID stored in session
 passport.deserializeUser((id, done) => {
   User.findById(id)
     .then(user => done(null, user))
     .catch(err => done(err, null));
 });
+
+module.exports = passport;

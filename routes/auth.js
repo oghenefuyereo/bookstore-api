@@ -11,11 +11,18 @@ router.get('/google', passport.authenticate('google', {
   scope: ['profile', 'email']
 }));
 
-router.get('/google/callback', passport.authenticate('google', {
-  failureRedirect: '/'
-}), (req, res) => {
-  const firstName = getFirstName(req.user.name);
-  res.send(`Welcome ${firstName}, you are logged in`);
+router.get('/google/callback', (req, res, next) => {
+  passport.authenticate('google', (err, user, info) => {
+    if (err) return next(err);
+    if (!user) return res.redirect('/');
+
+    // Log in the user and establish session
+    req.login(user, (err) => {
+      if (err) return next(err);
+      const firstName = getFirstName(user.name);
+      return res.send(`Welcome ${firstName}, you are logged in`);
+    });
+  })(req, res, next);
 });
 
 // GitHub OAuth login
@@ -23,28 +30,35 @@ router.get('/github', passport.authenticate('github', {
   scope: ['user:email']
 }));
 
-router.get('/github/callback', passport.authenticate('github', {
-  failureRedirect: '/'
-}), (req, res) => {
-  const firstName = getFirstName(req.user.name);
-  res.send(`Welcome ${firstName}, you are logged in`);
+router.get('/github/callback', (req, res, next) => {
+  passport.authenticate('github', (err, user, info) => {
+    if (err) return next(err);
+    if (!user) return res.redirect('/');
+
+    req.login(user, (err) => {
+      if (err) return next(err);
+      const firstName = getFirstName(user.name);
+      return res.send(`Welcome ${firstName}, you are logged in`);
+    });
+  })(req, res, next);
 });
 
 // Logout route
 router.get('/logout', (req, res, next) => {
   if (!req.isAuthenticated()) {
-    // User not logged in
     return res.send('You are not logged in');
   }
 
   const firstName = getFirstName(req.user.name);
 
-  req.logout(function(err) {
-    if (err) { 
-      return next(err); 
+  req.logout((err) => {
+    if (err) {
+      return next(err);
     }
-    // After logout, session is destroyed, so user info won't be available
-    res.send(`${firstName}, you have successfully logged out`);
+    req.session.destroy(() => {
+      res.clearCookie('connect.sid'); // clear cookie on logout
+      res.send(`${firstName}, you have successfully logged out`);
+    });
   });
 });
 

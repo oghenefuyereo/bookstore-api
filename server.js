@@ -19,18 +19,30 @@ require("./config/passport");
 
 const app = express();
 
+// Trust proxy for Render (important for session cookies over HTTPS)
+app.set("trust proxy", 1);
+
+// CORS configuration
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:3000", // frontend URL
+    credentials: true, // allow cookies to be sent
+  })
+);
+
 // Middleware
-app.use(cors());
 app.use(express.json());
 
+// Session setup
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "defaultsecret",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production", // secure in production
       httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // required for cross-site cookies
       maxAge: 1000 * 60 * 60 * 24, // 1 day
     },
   })
@@ -44,7 +56,7 @@ app.use(
   "/api-docs",
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument, {
-    customFavIcon: undefined, // Remove default Swagger icon
+    customFavIcon: undefined,
   })
 );
 
