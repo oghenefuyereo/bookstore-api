@@ -1,21 +1,29 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const userController = require('../controllers/userController');
-const { userValidationRules, validateUser } = require('../middleware/validateUser');
+const userController = require("../controllers/userController");
+const {
+  userValidationRules,
+  validateUser,
+} = require("../middleware/validateUser");
+const ensureAuth = require("../middleware/authMiddleware");
 
-// Get all users
-router.get('/', userController.getUsers);
-
-// Get user by ID  
-router.get('/:id', userController.getUserById);
-
-// Create a new user (with validation)
-router.post('/', userValidationRules, validateUser, userController.createUser);
-
-// Update user by ID (with validation)
-router.put('/:id', userValidationRules, validateUser, userController.updateUser);
-
-// Delete user by ID
-router.delete('/:id', userController.deleteUser);
+// Protect all user routes with ensureAuth
+router.get("/", ensureAuth, userController.getUsers);
+router.get("/:id", ensureAuth, userController.getUserById);
+router.post(
+  "/",
+  ensureAuth,
+  userValidationRules,
+  validateUser,
+  userController.createUser
+);
+router.put(
+  "/:id",
+  ensureAuth,
+  userValidationRules,
+  validateUser,
+  userController.updateUser
+);
+router.delete("/:id", ensureAuth, userController.deleteUser);
 
 module.exports = router;
