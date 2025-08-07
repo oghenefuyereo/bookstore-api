@@ -44,7 +44,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 app.use("/api/users", userRoutes);
-app.use("/api/books", bookRoutes); // 
+app.use("/api/books", bookRoutes);
 app.use("/auth", authRoutes);
 
 // Error Handler
