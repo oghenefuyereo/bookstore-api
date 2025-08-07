@@ -9,6 +9,7 @@ const userRoutes = require("./routes/userRoutes");
 const bookRoutes = require("./routes/bookRoutes");
 const authRoutes = require("./routes/auth");
 const errorHandler = require("./middleware/errorHandler");
+const ensureAuth = require("./middleware/authMiddleware"); // Import the auth middleware
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
@@ -60,9 +61,9 @@ app.use(
   })
 );
 
-// Routes
-app.use("/api/users", userRoutes);
-app.use("/api/books", bookRoutes);
+// Routes with auth middleware protecting users and books routes
+app.use("/api/users", ensureAuth, userRoutes);
+app.use("/api/books", ensureAuth, bookRoutes);
 app.use("/auth", authRoutes);
 
 // Error Handler
