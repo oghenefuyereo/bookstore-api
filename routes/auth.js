@@ -33,7 +33,12 @@ router.get('/github/callback', passport.authenticate('github', {
 
 // Logout
 router.get('/logout', (req, res, next) => {
-  const firstName = req.user ? getFirstName(req.user.name) : 'user';
+  if (!req.isAuthenticated()) {
+    return res.send('You are not logged in');
+  }
+
+  const firstName = getFirstName(req.user.name);
+
   req.logout(err => {
     if (err) return next(err);
     res.send(`${firstName}, you have successfully logged out`);
