@@ -6,7 +6,7 @@ const passport = require("passport");
 const connectDB = require("./config/db");
 
 const userRoutes = require("./routes/userRoutes");
-const bookRoutes = require("./routes/bookRoutes"); // ✅ New route for books
+const bookRoutes = require("./routes/bookRoutes");
 const authRoutes = require("./routes/auth");
 const errorHandler = require("./middleware/errorHandler");
 
@@ -44,7 +44,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 app.use("/api/users", userRoutes);
-app.use("/api/books", bookRoutes); // ✅ This adds second collection
+app.use("/api/books", bookRoutes); // 
 app.use("/auth", authRoutes);
 
 // Error Handler
