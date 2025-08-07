@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 
-// Helper to get first name safely
+// Helper to get first name from full name string
 function getFirstName(fullName) {
   return fullName ? fullName.split(' ')[0] : '';
 }
@@ -15,9 +15,6 @@ router.get('/google', passport.authenticate('google', {
 router.get('/google/callback', passport.authenticate('google', {
   failureRedirect: '/'
 }), (req, res) => {
-  if (!req.user) {
-    return res.redirect('/');
-  }
   const firstName = getFirstName(req.user.name);
   res.send(`Welcome ${firstName}, you are logged in`);
 });
@@ -30,18 +27,21 @@ router.get('/github', passport.authenticate('github', {
 router.get('/github/callback', passport.authenticate('github', {
   failureRedirect: '/'
 }), (req, res) => {
-  if (!req.user) {
-    return res.redirect('/');
-  }
   const firstName = getFirstName(req.user.name);
   res.send(`Welcome ${firstName}, you are logged in`);
 });
 
-// Logout route
+// Logout route with personalized message
 router.get('/logout', (req, res, next) => {
+  if (!req.user) {
+    // If no user is logged in
+    return res.send('You are not logged in');
+  }
+  const firstName = getFirstName(req.user.name);
+
   req.logout(err => {
     if (err) return next(err);
-    res.send('Logged out successfully');
+    res.send(`${firstName}, you have successfully logged out`);
   });
 });
 
