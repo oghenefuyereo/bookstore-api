@@ -39,8 +39,14 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Swagger API Docs
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// Swagger API Docs with icon removed
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    customFavIcon: undefined, // Remove default Swagger icon
+  })
+);
 
 // Routes
 app.use("/api/users", userRoutes);
