@@ -16,7 +16,7 @@ router.get('/google/callback', passport.authenticate('google', {
   failureRedirect: '/'
 }), (req, res) => {
   const firstName = getFirstName(req.user.name);
-  res.json({ message: `Welcome, ${firstName}!`, user: req.user });
+  res.send(`Welcome ${firstName}, you are logged in`);
 });
 
 // GitHub OAuth login
@@ -28,7 +28,7 @@ router.get('/github/callback', passport.authenticate('github', {
   failureRedirect: '/'
 }), (req, res) => {
   const firstName = getFirstName(req.user.name);
-  res.json({ message: `Welcome, ${firstName}!`, user: req.user });
+  res.send(`Welcome ${firstName}, you are logged in`);
 });
 
 // Logout
