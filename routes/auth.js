@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 
-// Helper to get first name
+// Helper to get first name from full name string
 function getFirstName(fullName) {
   return fullName ? fullName.split(' ')[0] : '';
 }
@@ -31,9 +31,13 @@ router.get('/github/callback', passport.authenticate('github', {
   res.send(`Welcome ${firstName}, you are logged in`);
 });
 
-// Logout
+// Logout route with personalized message
 router.get('/logout', (req, res, next) => {
-  const firstName = req.user ? getFirstName(req.user.name) : 'User';
+  if (!req.isAuthenticated()) {
+    return res.send('You are not logged in');
+  }
+  const firstName = getFirstName(req.user.name);
+
   req.logout(err => {
     if (err) return next(err);
     res.send(`${firstName}, you have successfully logged out`);
